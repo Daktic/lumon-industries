@@ -18,6 +18,7 @@ export default function Home() {
     const searchParams = useSearchParams();
     const first = searchParams?.get('first');
     const last = searchParams?.get('last');
+    const address = searchParams?.get('address');
 
     let usedName = "New Employee";
     if (first && last) {
@@ -94,7 +95,7 @@ export default function Home() {
 
     useEffect(() => {
         if (dialogBox.length > 1) {
-            const newInteraction = dialogBox[dialogBox.length - 1].text;
+            const newInteraction = dialogBox[dialogBox.length - 1].userText;
             setDisplayedText((prev) => prev + "\n" + newInteraction);
         }
     }, [dialogBox]);
@@ -109,7 +110,8 @@ export default function Home() {
                 body: JSON.stringify({ usedName }),
             });
             const result = await response.json();
-            setDialogBox((prevDialogBox) => [...prevDialogBox, { sender: senderType.BOT, text: result }]);
+            const resultInteraction: interaction = { sender: senderType.BOT, userText: result };
+            setDialogBox((prevDialogBox) => [...prevDialogBox, resultInteraction]);
         }
 
         fetchData();
