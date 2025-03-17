@@ -27,7 +27,7 @@ body {
 }
 
 .background-image {
-  background-image: url('../public/HomeScreen.jpeg');
+  background-image: url('/HomeScreen.jpeg');
   background-size: cover;
   background-position: center top; /* Adjust this value to zoom in on a different point */
   height: 100vh;
