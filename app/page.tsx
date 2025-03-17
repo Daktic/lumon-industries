@@ -13,7 +13,6 @@ enum senderType {
     BOT
 }
 
-
 export default function Home() {
     const searchParams = useSearchParams();
     const first = searchParams?.get('first');
@@ -33,6 +32,7 @@ export default function Home() {
 
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef(null);
+    const interactiveBoxRef = useRef(null);
 
     const [dialogBox, setDialogBox] = useState([]);
     const [displayedText, setDisplayedText] = useState("");
@@ -68,11 +68,16 @@ export default function Home() {
             if (currentIndex < resultText.length) {
                 setDialogBox((prevDialogBox) => {
                     const updatedDialogBox = [...prevDialogBox];
-                    const lastInteraction = updatedDialogBox[updatedDialogBox.length - 1];
-                    if (lastInteraction.sender === senderType.BOT) {
-                        lastInteraction.textValue += resultText[currentIndex];
+                    const currentText = resultText.substring(0, currentIndex + 1);
+                    // If there's no last BOT message, add one.
+                    if (
+                        updatedDialogBox.length === 0 ||
+                        updatedDialogBox[updatedDialogBox.length - 1].sender !== senderType.BOT
+                    ) {
+                        updatedDialogBox.push({ sender: senderType.BOT, textValue: currentText });
                     } else {
-                        updatedDialogBox.push({ sender: senderType.BOT, textValue: resultText[currentIndex] });
+                        // Otherwise, update the last BOT message.
+                        updatedDialogBox[updatedDialogBox.length - 1].textValue = currentText;
                     }
                     return updatedDialogBox;
                 });
@@ -80,9 +85,8 @@ export default function Home() {
             } else {
                 clearInterval(intervalId);
             }
-        }, 100); // Adjust the interval time as needed
+        }, 10); // Adjust the interval time as needed
     };
-
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -94,8 +98,6 @@ export default function Home() {
             setInputValue("");
         }
     }
-
-
 
     useEffect(() => {
         if (dialogBox.length > 1) {
@@ -114,22 +116,50 @@ export default function Home() {
                 body: JSON.stringify({ usedName, address }),
             });
             const result = await response.json();
-            const resultInteraction: interaction = { sender: senderType.BOT, textValue: result };
-            setDialogBox((prevDialogBox) => [...prevDialogBox, resultInteraction]);
+            const resultText = result;
+
+            let currentIndex = 0;
+            const intervalId = setInterval(() => {
+                setDialogBox((prevDialogBox) => {
+                    const updatedDialogBox = [...prevDialogBox];
+                    const currentText = resultText.substring(0, currentIndex + 1);
+                    // If there's no last BOT message, add one.
+                    if (
+                        updatedDialogBox.length === 0 ||
+                        updatedDialogBox[updatedDialogBox.length - 1].sender !== senderType.BOT
+                    ) {
+                        updatedDialogBox.push({ sender: senderType.BOT, textValue: currentText });
+                    } else {
+                        // Otherwise, update the last BOT message.
+                        updatedDialogBox[updatedDialogBox.length - 1].textValue = currentText;
+                    }
+                    return updatedDialogBox;
+                });
+                currentIndex++;
+                if (currentIndex >= resultText.length) {
+                    clearInterval(intervalId);
+                }
+            }, 20); // Adjust the interval time as needed
         }
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (interactiveBoxRef.current) {
+            interactiveBoxRef.current.scrollTop = interactiveBoxRef.current.scrollHeight;
+        }
+    }, [dialogBox]);
 
     return (
         <div className="background-image">
             <audio ref={audioRef} src="/SeverencePiano.mp3" loop autoPlay>
                 Your browser does not support the audio element.
             </audio>
-            <div className="interactive-box">
+            <div className="interactive-box" ref={interactiveBoxRef}>
                 {dialogBox.map((interaction, index) => (
                     <p key={index} className={interaction.sender === senderType.USER ? 'USER' : 'BOT'}>
-                        {interaction.sender === senderType.BOT ? `Mr.Milcheck: ${interaction.textValue}` : interaction.textValue}
+                        {interaction.sender === senderType.BOT ? `Mr. Milchick: ${interaction.textValue}` : interaction.textValue}
                     </p>
                 ))}
             </div>

@@ -43,6 +43,10 @@ body {
   position: relative;
 }
 
+.interactive-box p {
+  font-size: 1em;
+}
+
 .input-box {
   display: flex;
   justify-content: flex-end;
