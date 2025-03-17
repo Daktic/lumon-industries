@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 
 type interaction = {
     sender: senderType;
-    text: string;
+    userText: string;
 }
 
 enum senderType {
@@ -16,8 +16,8 @@ enum senderType {
 
 export default function Home() {
     const searchParams = useSearchParams();
-    const first = searchParams.get('first');
-    const last = searchParams.get('last');
+    const first = searchParams?.get('first');
+    const last = searchParams?.get('last');
 
     const usedName = `${first[0].toUpperCase() + first.slice(1).toLowerCase()} ${last[0].toUpperCase()}`
 
@@ -31,7 +31,7 @@ export default function Home() {
 
     const [dialogBox, setDialogBox] = useState([{
         sender: senderType.BOT,
-        text: greeting
+        userText: greeting
     }]);
     const [displayedText, setDisplayedText] = useState("");
     const [inputValue, setInputValue] = useState("");
@@ -46,9 +46,11 @@ export default function Home() {
         setIsPlaying(!isPlaying);
     };
 
-    const handleUserInteraction = async (text: String) => {
+    const handleUserInteraction = async (userText: string) => {
 
-        setDialogBox((prevDialogBox) => [...prevDialogBox, { sender: senderType.USER, text: text }]);
+        const userInteraction: interaction = { sender: senderType.USER, userText: userText };
+
+        setDialogBox((prevDialogBox) => [...prevDialogBox, userInteraction]);
 
         const response = await fetch('/api/Ai', {
             method: 'POST',
@@ -58,7 +60,7 @@ export default function Home() {
             body: JSON.stringify({ newMessage: text }),
         });
         const result = await response.json();
-        setDialogBox((prevDialogBox) => [...prevDialogBox, { sender: senderType.BOT, text: result }]);
+        setDialogBox((prevDialogBox) => [...prevDialogBox, { sender: senderType.BOT, userText: result }]);
     };
 
     const handleInputChange = (event) => {
@@ -73,7 +75,7 @@ export default function Home() {
     }
 
     useEffect(() => {
-        const text = dialogBox[0].text;
+        const text = dialogBox[0].userText;
         let index = 0;
 
         const interval = setInterval(() => {
