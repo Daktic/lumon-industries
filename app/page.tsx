@@ -49,9 +49,7 @@ export default function Home() {
     };
 
     const handleUserInteraction = async (userText: string) => {
-
         const userInteraction: interaction = { sender: senderType.USER, textValue: userText };
-
         setDialogBox((prevDialogBox) => [...prevDialogBox, userInteraction]);
 
         const response = await fetch('/api/Ai', {
@@ -61,9 +59,30 @@ export default function Home() {
             },
             body: JSON.stringify({ newMessage: userText }),
         });
+
         const result = await response.json();
-        setDialogBox((prevDialogBox) => [...prevDialogBox, { sender: senderType.BOT, textValue: result }]);
+        const resultText = result;
+
+        let currentIndex = 0;
+        const intervalId = setInterval(() => {
+            if (currentIndex < resultText.length) {
+                setDialogBox((prevDialogBox) => {
+                    const updatedDialogBox = [...prevDialogBox];
+                    const lastInteraction = updatedDialogBox[updatedDialogBox.length - 1];
+                    if (lastInteraction.sender === senderType.BOT) {
+                        lastInteraction.textValue += resultText[currentIndex];
+                    } else {
+                        updatedDialogBox.push({ sender: senderType.BOT, textValue: resultText[currentIndex] });
+                    }
+                    return updatedDialogBox;
+                });
+                currentIndex++;
+            } else {
+                clearInterval(intervalId);
+            }
+        }, 100); // Adjust the interval time as needed
     };
+
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
