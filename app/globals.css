@@ -24,3 +24,64 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+.background-image {
+  /*background-image: url('../public/HomeScreen.jpeg');*/
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.interactive-box {
+  border: 1px solid red;
+  height: 28vh;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  padding: 1em;
+  position: relative;
+}
+
+.input-box {
+  border: 1px solid blue;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  padding: 0.5em;
+  background-color: rgba(255, 255, 255, 0.11); /* Optional: to make the input box stand out */
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blinking-cursor::after {
+  content: '|';
+  animation: blink 1s step-start infinite;
+  margin-left: 2px;
+  color: white;
+}
+
+.USER {
+  display: flex;
+  justify-content: end;
+}
+
+.BOT {
+  display: flex;
+  justify-content: start;
+}
