@@ -27,7 +27,7 @@ body {
 
 
 .background-image {
-  background-image: url('../public/HomeScreen.jpeg');
+  /*background-image: url('../public/HomeScreen.jpeg');*/
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -64,24 +64,45 @@ body {
     font-size: 1em;
 }
 
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.input-wrapper {
+  width: 100%;
+  position: relative;
+  display: inline-block;
 }
 
-.blinking-cursor::after {
-  content: '|';
-  animation: blink 1s step-start infinite;
-  margin-left: 2px;
-  color: #f60000;
+.input-wrapper input {
+  width: 100%;
+  padding: 0.5em;
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 1em;
+  caret-color: transparent; /* Hide native caret */
+  direction: rtl; /* Make text input right-to-left */
 }
+
+.input-wrapper input:focus {
+  outline: rgba(255, 255, 255, 0.09); /* Remove yellow focus border (accessibility note: consider a custom focus style) */
+}
+
+.blinking-cursor {
+  position: absolute;
+  left: calc(98% + 2px); /* adjust based on text length/position */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffffff;
+  animation: blink 1s step-start infinite;
+  font-family: C059, serif;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 
 .USER {
   display: flex;

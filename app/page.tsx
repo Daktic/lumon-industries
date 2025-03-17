@@ -120,12 +120,10 @@ export default function Home() {
                     <p key={index} className={interaction.sender === senderType.USER ? 'USER' : 'BOT'}>{interaction.text}</p>
                 ))}
                 <div className="input-box">
-                    <input
-                        className={"blinking-cursor"}
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyDown}
-                    />
+                    <div className="input-wrapper">
+                        <input value={inputValue} onChange={handleInputChange} onKeyDown={handleKeyDown}/>
+                        <span className="blinking-cursor">&lt;</span>
+                    </div>
                 </div>
             </div>
             <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
