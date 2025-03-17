@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 
 type interaction = {
     sender: senderType;
-    userText: string;
+    textValue: string;
 }
 
 enum senderType {
@@ -35,7 +35,7 @@ export default function Home() {
 
     const [dialogBox, setDialogBox] = useState([{
         sender: senderType.BOT,
-        userText: greeting
+        textValue: greeting
     }]);
     const [displayedText, setDisplayedText] = useState("");
     const [inputValue, setInputValue] = useState("");
@@ -52,7 +52,7 @@ export default function Home() {
 
     const handleUserInteraction = async (userText: string) => {
 
-        const userInteraction: interaction = { sender: senderType.USER, userText: userText };
+        const userInteraction: interaction = { sender: senderType.USER, textValue: userText };
 
         setDialogBox((prevDialogBox) => [...prevDialogBox, userInteraction]);
 
@@ -61,10 +61,10 @@ export default function Home() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ newMessage: text }),
+            body: JSON.stringify({ newMessage: userText }),
         });
         const result = await response.json();
-        setDialogBox((prevDialogBox) => [...prevDialogBox, { sender: senderType.BOT, userText: result }]);
+        setDialogBox((prevDialogBox) => [...prevDialogBox, { sender: senderType.BOT, textValue: result }]);
     };
 
     const handleInputChange = (event) => {
@@ -79,7 +79,7 @@ export default function Home() {
     }
 
     useEffect(() => {
-        const text = dialogBox[0].userText;
+        const text = dialogBox[0].textValue;
         let index = 0;
 
         const interval = setInterval(() => {
@@ -95,7 +95,7 @@ export default function Home() {
 
     useEffect(() => {
         if (dialogBox.length > 1) {
-            const newInteraction = dialogBox[dialogBox.length - 1].userText;
+            const newInteraction = dialogBox[dialogBox.length - 1].textValue;
             setDisplayedText((prev) => prev + "\n" + newInteraction);
         }
     }, [dialogBox]);
@@ -110,7 +110,7 @@ export default function Home() {
                 body: JSON.stringify({ usedName }),
             });
             const result = await response.json();
-            const resultInteraction: interaction = { sender: senderType.BOT, userText: result };
+            const resultInteraction: interaction = { sender: senderType.BOT, textValue: result };
             setDialogBox((prevDialogBox) => [...prevDialogBox, resultInteraction]);
         }
 
@@ -124,13 +124,13 @@ export default function Home() {
             </audio>
             <div className="interactive-box">
                 {dialogBox.map((interaction, index) => (
-                    <p key={index} className={interaction.sender === senderType.USER ? 'USER' : 'BOT'}>{interaction.text}</p>
+                    <p key={index} className={interaction.sender === senderType.USER ? 'USER' : 'BOT'}>{interaction.textValue}</p>
                 ))}
-                <div className="input-box">
-                    <div className="input-wrapper">
-                        <input value={inputValue} onChange={handleInputChange} onKeyDown={handleKeyDown}/>
-                        <span className="blinking-cursor">&lt;</span>
-                    </div>
+            </div>
+            <div className="input-box">
+                <div className="input-wrapper">
+                    <input value={inputValue} onChange={handleInputChange} onKeyDown={handleKeyDown}/>
+                    <span className="blinking-cursor">&lt;</span>
                 </div>
             </div>
             <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>

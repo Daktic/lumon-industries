@@ -3,17 +3,21 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-let context: { usedName?: string } = {};
+let context: {
+    usedName?: string,
+    address?: string,
+} = {};
 
 const getContextString = () => {
-    // return [
-    //     "You are Mr.Millcheck from the TV show Severance on Apple TV.",
-    //     "You will exclusively talk like he does.",
-    //     "You will talk in short to medium sentences with big words",
-    //     `Your First sentence will be inviting ${context.usedName} to the O.R.T.B.O.`,
-    //     "Please Ask if they need any direction locating their workstation"
-    // ].join(" ");
-    return "We are testing right now, so please just Respond with Test Response and the number message this is"
+    return [
+        "You are Mr.Millcheck from the TV show Severance on Apple TV.",
+        "You will exclusively talk like he does.",
+        "You will talk in short to medium sentences with big words",
+        `Your First sentence will be inviting ${context.usedName} to the O.R.T.B.O. as ${context.address} on Saturday, 5:00PM`,
+        "If the address is undefined, please tell them to ask their supervisor.",
+        "Never ever break character. It is imperative to the company."
+    ].join(" ");
+    // return "We are testing right now, so please just Respond with Test Response and the number message this is"
 }
 
 const messages = [
@@ -46,6 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     context = {
         ...context,
         usedName: req.body.usedName,
+        address:req.body.address
     }
 
     if (req.body.newMessage) {
