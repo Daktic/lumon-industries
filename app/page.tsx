@@ -25,11 +25,6 @@ export default function Home() {
         usedName = `${first[0].toUpperCase() + first.slice(1).toLowerCase()} ${last[0].toUpperCase()}`
     }
 
-    let greeting = "Hello new Employee!";
-    if (first && last) {
-        greeting = `Hello, ${usedName}.`;
-    }
-
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef(null);
     const interactiveBoxRef = useRef(null);
@@ -90,6 +85,10 @@ export default function Home() {
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
+        if (!isPlaying && audioRef.current) {
+            audioRef.current.play();
+            setIsPlaying(true);
+        }
     };
 
     const handleKeyDown = (event) => {
@@ -153,7 +152,7 @@ export default function Home() {
 
     return (
         <div className="background-image">
-            <audio ref={audioRef} src="/SeverencePiano.mp3" loop autoPlay>
+            <audio ref={audioRef} src="/SeverencePiano.mp3" loop>
                 Your browser does not support the audio element.
             </audio>
             <div className="interactive-box" ref={interactiveBoxRef}>
@@ -169,7 +168,7 @@ export default function Home() {
                     <span className="blinking-cursor">&lt;</span>
                 </div>
             </div>
-            <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+            <button className={"music-exp"} onClick={togglePlay}>{isPlaying ? 'Stop the Music Experience' : ''}</button>
         </div>
     );
 }
