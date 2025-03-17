@@ -27,7 +27,7 @@ export default function Home() {
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [isManuallyStopped, setIsManuallyStopped] = useState(false);
-    const audioRef = useRef(null);
+    const audioRef: RefObject<HTMLAudioElement> = useRef(null);
     const interactiveBoxRef = useRef(null);
 
     const [dialogBox, setDialogBox] = useState([]);
