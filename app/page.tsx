@@ -121,7 +121,7 @@ export default function Home() {
                 ))}
                 <div className="input-box">
                     <input
-                        className="blinking-cursor"
+                        className={"blinking-cursor"}
                         value={inputValue}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}

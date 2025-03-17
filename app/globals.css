@@ -27,7 +27,7 @@ body {
 
 
 .background-image {
-  /*background-image: url('../public/HomeScreen.jpeg');*/
+  background-image: url('../public/HomeScreen.jpeg');
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -35,7 +35,6 @@ body {
 }
 
 .interactive-box {
-  border: 1px solid red;
   height: 28vh;
   display: flex;
   flex-direction: column;
@@ -45,7 +44,6 @@ body {
 }
 
 .input-box {
-  border: 1px solid blue;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
@@ -55,6 +53,15 @@ body {
   width: 100%;
   padding: 0.5em;
   background-color: rgba(255, 255, 255, 0.11); /* Optional: to make the input box stand out */
+}
+
+.input-box input {
+    width: 100%;
+    padding: 0.5em;
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 1em;
 }
 
 @keyframes blink {
@@ -73,7 +80,7 @@ body {
   content: '|';
   animation: blink 1s step-start infinite;
   margin-left: 2px;
-  color: white;
+  color: #f60000;
 }
 
 .USER {
