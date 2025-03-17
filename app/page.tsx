@@ -18,7 +18,8 @@ export default function Home() {
     const searchParams = useSearchParams();
     const first = searchParams?.get('first');
     const last = searchParams?.get('last');
-    const address = searchParams?.get('address');
+    const rawAddress = searchParams?.get('address');
+    const address = decodeURIComponent(rawAddress || "");
 
     let usedName = "New Employee";
     if (first && last) {
@@ -33,10 +34,7 @@ export default function Home() {
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef(null);
 
-    const [dialogBox, setDialogBox] = useState([{
-        sender: senderType.BOT,
-        textValue: greeting
-    }]);
+    const [dialogBox, setDialogBox] = useState([]);
     const [displayedText, setDisplayedText] = useState("");
     const [inputValue, setInputValue] = useState("");
 
@@ -78,20 +76,7 @@ export default function Home() {
         }
     }
 
-    useEffect(() => {
-        const text = dialogBox[0].textValue;
-        let index = 0;
 
-        const interval = setInterval(() => {
-            setDisplayedText((prev) => prev + text[index]);
-            index++;
-            if (index === text.length) {
-                clearInterval(interval);
-            }
-        }, 100); // Adjust the interval time to control typing speed
-
-        return () => clearInterval(interval);
-    }, []);
 
     useEffect(() => {
         if (dialogBox.length > 1) {
@@ -107,7 +92,7 @@ export default function Home() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ usedName }),
+                body: JSON.stringify({ usedName, address }),
             });
             const result = await response.json();
             const resultInteraction: interaction = { sender: senderType.BOT, textValue: result };
@@ -124,7 +109,9 @@ export default function Home() {
             </audio>
             <div className="interactive-box">
                 {dialogBox.map((interaction, index) => (
-                    <p key={index} className={interaction.sender === senderType.USER ? 'USER' : 'BOT'}>{interaction.textValue}</p>
+                    <p key={index} className={interaction.sender === senderType.USER ? 'USER' : 'BOT'}>
+                        {interaction.sender === senderType.BOT ? `Mr.Milcheck: ${interaction.textValue}` : interaction.textValue}
+                    </p>
                 ))}
             </div>
             <div className="input-box">
