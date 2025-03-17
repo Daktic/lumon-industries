@@ -8,6 +8,11 @@ let context: {
     address?: string,
 } = {};
 
+type Message = {
+    role: string;
+    content: string;
+};
+
 const getContextString = () => {
     return [
         "You are Mr. Milchick from the TV show Severance on Apple TV.",
@@ -46,7 +51,7 @@ const getOptions = (messages:any[]) => {
 
 const baseURL = "https://api.venice.ai/api/v1/chat/completions";
 
-const messages = []
+const messages: Message[] = [];
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -80,7 +85,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.log(error)
         console.log(responseJSON)
-        console.log(getOptions());
     }
 
 }
