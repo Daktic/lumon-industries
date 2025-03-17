@@ -26,6 +26,7 @@ export default function Home() {
     }
 
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isManuallyStopped, setIsManuallyStopped] = useState(false);
     const audioRef = useRef(null);
     const interactiveBoxRef = useRef(null);
 
@@ -37,8 +38,10 @@ export default function Home() {
         if (!audioRef.current) return;
         if (isPlaying) {
             audioRef.current.pause();
+            setIsManuallyStopped(true);
         } else {
             audioRef.current.play();
+            setIsManuallyStopped(false);
         }
         setIsPlaying(!isPlaying);
     };
@@ -85,7 +88,7 @@ export default function Home() {
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
-        if (!isPlaying && audioRef.current) {
+        if (!isPlaying && audioRef.current && !isManuallyStopped) {
             audioRef.current.play();
             setIsPlaying(true);
         }
@@ -168,7 +171,7 @@ export default function Home() {
                     <span className="blinking-cursor">&lt;</span>
                 </div>
             </div>
-            <button className={"music-exp"} onClick={togglePlay}>{isPlaying ? 'Stop the Music Experience' : ''}</button>
+                <button className={"music-exp"} onClick={togglePlay}>{isPlaying ? 'Stop the Music Experience' : 'Resume the Music Experience'}</button>
         </div>
     );
 }
