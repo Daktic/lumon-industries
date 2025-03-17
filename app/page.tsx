@@ -19,7 +19,10 @@ export default function Home() {
     const first = searchParams?.get('first');
     const last = searchParams?.get('last');
 
-    const usedName = `${first[0].toUpperCase() + first.slice(1).toLowerCase()} ${last[0].toUpperCase()}`
+    let usedName = "New Employee";
+    if (first && last) {
+        usedName = `${first[0].toUpperCase() + first.slice(1).toLowerCase()} ${last[0].toUpperCase()}`
+    }
 
     let greeting = "Hello new Employee!";
     if (first && last) {
