@@ -51,10 +51,10 @@ const getOptions = (messages:any[]) => {
 
 const baseURL = "https://api.venice.ai/api/v1/chat/completions";
 
-const messages: Message[] = [];
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
+    const messages: Message[] = [];
     context = {
         usedName: req.body.usedName,
         address:req.body.address
