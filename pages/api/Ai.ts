@@ -76,11 +76,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             content: getContextString()
         });
 
-    if (req.body.newMessages && Array.isArray(req.body.newMessages)) {
-        req.body.newMessages.forEach((message:string) => {
+    if (req.body.messages && Array.isArray(req.body.messages)) {
+        req.body.newMessages.forEach((message:Message) => {
             messages.push({
-                role: "user",
-                content: message,
+                role: message.role,
+                content: message.content,
             });
         });
     }
