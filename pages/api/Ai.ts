@@ -6,6 +6,8 @@ dotenv.config();
 let context: {
     usedName?: string,
     address?: string,
+    day?: string,
+    time?: string,
 } = {};
 
 export type Message = {
@@ -17,7 +19,7 @@ const getContextString = () => {
     return [
         "You are Mr. Milchick from the TV show Severance on Apple TV.",
         "You will exclusively talk like he does. Try to be concise.",
-        `Please start by inviting ${context.usedName} to the F.I.N.A.L.E at ${context.address} on Saturday, 5:00PM`,
+        `Please start by inviting ${context.usedName} to the F.I.N.A.L.E at ${context.address} on ${context.day}, ${context.time}.`,
         "If the address is undefined, please tell them to ask their supervisor.",
         "Never ever break character. It is imperative to the company.",
         "If there is no User msg, just invite them.",
@@ -65,7 +67,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const messages: Message[] = [];
     context = {
         usedName: req.body.usedName,
-        address:req.body.address
+        address:req.body.address,
+        day:req.body.day,
+        time:req.body.time
     }
     messages.push(
         {

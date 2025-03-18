@@ -18,6 +18,8 @@ export default function Home() {
     const searchParams = useSearchParams();
     const first = searchParams?.get('first');
     const last = searchParams?.get('last');
+    const day = searchParams?.get('day');
+    const time = searchParams?.get('time');
     const rawAddress = searchParams?.get('address');
     const address = decodeURIComponent(rawAddress || "");
 
@@ -125,7 +127,7 @@ export default function Home() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ usedName, address }),
+                body: JSON.stringify({ usedName, address, day, time }),
             });
             const result = await response.json();
             const resultText = result;
