@@ -77,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
     if (req.body.messages && Array.isArray(req.body.messages)) {
-        req.body.newMessages.forEach((message:Message) => {
+        req.body.messages.forEach((message:Message) => {
             messages.push({
                 role: message.role,
                 content: message.content,
