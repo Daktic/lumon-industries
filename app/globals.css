@@ -51,7 +51,7 @@ body {
 }
 
 .interactive-box {
-  height: 26vh;
+  height: 25.5vh;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
