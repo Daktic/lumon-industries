@@ -8,7 +8,7 @@ let context: {
     address?: string,
 } = {};
 
-type Message = {
+export type Message = {
     role: string;
     content: string;
 };
@@ -76,11 +76,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             content: getContextString()
         });
 
-    if (req.body.newMessage) {
-        messages.push({
-            role:"user",
-            content: req.body.newMessage,
-        })
+    if (req.body.newMessages && Array.isArray(req.body.newMessages)) {
+        req.body.newMessages.forEach((message:string) => {
+            messages.push({
+                role: "user",
+                content: message,
+            });
+        });
     }
 
     const response = await fetch(baseURL, getOptions(messages));

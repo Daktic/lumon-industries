@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, RefObject } from "react";
 import { useSearchParams } from 'next/navigation';
+import {Message} from "../pages/api/Ai"
 
 type interaction = {
     sender: senderType;
@@ -50,13 +51,22 @@ export default function Home() {
         const userInteraction: interaction = { sender: senderType.USER, textValue: userText };
         setDialogBox((prevDialogBox) => [...prevDialogBox, userInteraction]);
 
-        const response = await fetch('/api/Ai', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ newMessage: userText }),
-        });
+    // Transform dialogBox into an array of Message objects
+    const formattedMessages: Message[] = dialogBox.map((interaction) => ({
+        role: interaction.sender === senderType.BOT ? "assistant" : "user",
+        content: interaction.textValue,
+    }));
+
+    // Also include the new user message
+    formattedMessages.push({ role: "user", content: userText });
+
+    const response = await fetch('/api/Ai', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ messages: formattedMessages }), // Send full chat history
+    });
 
         const result = await response.json();
         const resultText = result;
